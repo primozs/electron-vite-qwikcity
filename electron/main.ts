@@ -1,5 +1,6 @@
 import { app, BrowserWindow } from "electron";
 import path from "node:path";
+import serve from "electron-serve";
 
 // The built directory structure
 //
@@ -14,6 +15,8 @@ process.env.DIST = path.join(__dirname, "../dist");
 process.env.VITE_PUBLIC = app.isPackaged
   ? process.env.DIST
   : path.join(process.env.DIST, "../public");
+
+const loadURL = serve({ directory: "dist" });
 
 let win: BrowserWindow | null;
 // 🚧 Use ['ENV_NAME'] avoid vite:define plugin - Vite@2.x
@@ -38,7 +41,8 @@ function createWindow() {
     win.loadURL(VITE_DEV_SERVER_URL);
   } else {
     // win.loadFile('dist/index.html')
-    win.loadFile(path.join(process.env.DIST, "index.html"));
+    // win.loadFile(path.join(process.env.DIST, "index.html"));
+    loadURL(win);
   }
 }
 
